@@ -1,7 +1,7 @@
 # TEOBPM_mismatch
 
 In this repo are stored some scripts to study in time domain the characteristics of various gravitational wave (GW) models.\
-Currently, it is possible to compare the numerical relativity (NR) simulations from the [`SXS`](https://data.black-holes.org/waveforms/index.html) catalog with the `TEOBPM` ringdown model implemented in [`pyRing`](https://git.ligo.org/lscsoft/pyring), and the [`TEOBResumS`](https://bitbucket.org/eob_ihes/teobresums/src/master/) inspiral-merger-ringdown model.\
+Currently, it is possible to compare the numerical relativity (NR) simulations from the [`SXS`](https://data.black-holes.org/waveforms/index.html) catalog with the `TEOBPM` ringdown model implemented in [`pyRing`](https://git.ligo.org/lscsoft/pyring), and the [`TEOBResumS`](https://bitbucket.org/eob_ihes/teobresums/src/master/) inspiral-merger-ringdown model.
 
 
 #### `SXS_mismatch_catalog.py`
