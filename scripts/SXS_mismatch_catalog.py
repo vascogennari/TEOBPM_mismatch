@@ -10,7 +10,7 @@ import sxs
 
 '''
 DOCUMENTATION
-The script comoutes the mismatch in time domain bewtween TEOBPM
+The script computes the mismatch in time domain bewtween TEOBPM
 impemented in pyRing and the SXS catalog, for all the simulations in SXS
 with initial spins aligned or anti-aligned with the orbital angular momentum.
 Also, one can compare both the TEOBResumS and pyRing
