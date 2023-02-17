@@ -54,6 +54,26 @@ if plot=1, then select the dimensions of the plots
 0   both 2D and 3D plots
 '''
 
+from matplotlib import rcParams
+from distutils.spawn import find_executable
+
+tex_flag = False
+if find_executable('latex'):
+    rcParams["text.usetex"] = True
+    tex_flag = True
+rcParams["xtick.labelsize"] = 14
+rcParams["ytick.labelsize"] = 14
+rcParams["xtick.direction"] = "in"
+rcParams["ytick.direction"] = "in"
+rcParams["legend.fontsize"] = 12
+rcParams["legend.frameon"]  = False
+rcParams["legend.loc"]      = "best"
+rcParams["axes.labelsize"]  = 16
+rcParams["axes.grid"]       = True
+rcParams["grid.alpha"]      = 0.6
+rcParams["grid.linestyle"]  = "dotted"
+rcParams["lines.linewidth"] = 0.7
+
 
 def mode_output(hp, hc):
     ''' return the complex strain, given hp and hc '''
@@ -136,12 +156,12 @@ def SNR_threshold_from_FF(FF, logB_threshold):
 def variables(flag):
     ''' switch containing the possible
         pairs of parameters '''
-    switch = { 1 : (('q'          , 'af')         , (q_range, chi_range)    , ('$\iota$', '$D$')                 , (iota, dist)       , ('$q$', '$a_f$')),
-               2 : (('q'          , 'inclination'), (q_range, incl_range)   , ('$\chi_1$', '$\chi_2$', '$D$')    , (chi1, chi2, dist) , ('$q$', '$\iota$ [rad]')), 
-               3 : (('q'          , 'distance')   , (q_range, dist_range)   , ('$\chi_1$', '$\chi_2$', '$\iota$'), (chi1, chi2, iota) , ('$q$', '$D$ [Mpc]')),
-               4 : (('inclination', 'af')         , (incl_range, chi_range) , ('$q$', '$D$')                     , (q_val, dist)      , ('$\iota$ [rad]', '$a_f$')),
-               5 : (('distance'   , 'af')         , (dist_range, chi_range) , ('$q$', '$\iota$')                 , (q_val, iota)      , ('$D$ [Mpc]', '$a_f$')),
-               6 : (('distance'   , 'inclination'), (dist_range, incl_range), ('$\chi_1$', '$\chi_2$', '$q$')    , (chi1, chi2, q_val), ('$D$ [Mpc]', '$\iota$ [rad]'))}
+    switch = { 1 : (('q'          , 'af')         , (q_range, chi_range)    , ('$\\iota$', '$D$')                 , (iota, dist)       , ('$q$', '$a_f$')),
+               2 : (('q'          , 'inclination'), (q_range, incl_range)   , ('$\\chi_1$', '$\\chi_2$', '$D$')    , (chi1, chi2, dist) , ('$q$', '$\\iota\ [rad]$')), 
+               3 : (('q'          , 'distance')   , (q_range, dist_range)   , ('$\\chi_1$', '$\\chi_2$', '$\iota$'), (chi1, chi2, iota) , ('$q$', '$D\ [Mpc]$')),
+               4 : (('inclination', 'af')         , (incl_range, chi_range) , ('$q$', '$D$')                     , (q_val, dist)      , ('$\\iota\ [rad]$', '$a_f$')),
+               5 : (('distance'   , 'af')         , (dist_range, chi_range) , ('$q$', '$\\iota$')                 , (q_val, iota)      , ('$D\ [Mpc]$', '$a_f$')),
+               6 : (('distance'   , 'inclination'), (dist_range, incl_range), ('$\\chi_1$', '$\\chi_2$', '$q$')    , (chi1, chi2, q_val), ('$D\ [Mpc]$', '$\\iota [rad]$'))}
 
     return switch.get(flag)
 
@@ -193,7 +213,6 @@ class Mismatch:
                                                          TEOB_params['inclination'],
                                                          TEOB_params['phi'],
                                                          [(2,2)],
-                                                         TEOB_params['full-modes'],
                                                          TEOB_params['TGR'],
                                                          TEOB_params['geom'])
 
@@ -215,7 +234,6 @@ class Mismatch:
                                                              TEOB_params['inclination'],
                                                              TEOB_params['phi'],
                                                              [(2,2), mode],
-                                                             TEOB_params['full-modes'],
                                                              TEOB_params['TGR'],
                                                              TEOB_params['geom'])
 
@@ -251,7 +269,6 @@ class Mismatch:
                                                      TEOB_params['inclination'],
                                                      TEOB_params['phi'],
                                                      [(2,2)],
-                                                     TEOB_params['full-modes'],
                                                      TEOB_params['TGR'],
                                                      TEOB_params['geom'])
 
@@ -273,7 +290,6 @@ class Mismatch:
                                                          TEOB_params['inclination'],
                                                          TEOB_params['phi'],
                                                          [(2,2), mode],
-                                                         TEOB_params['full-modes'],
                                                          TEOB_params['TGR'],
                                                          TEOB_params['geom'])
 
@@ -307,7 +323,6 @@ class Mismatch:
                                             TEOB_params['inclination'],
                                             TEOB_params['phi'],
                                             [(2,2)],
-                                            TEOB_params['full-modes'],
                                             TEOB_params['TGR'],
                                             TEOB_params['geom'])
 
@@ -328,7 +343,6 @@ class Mismatch:
                                                 TEOB_params['inclination'],
                                                 TEOB_params['phi'],
                                                 [(2,2), mode],
-                                                TEOB_params['full-modes'],
                                                 TEOB_params['TGR'],
                                                 TEOB_params['geom'])
 
@@ -371,15 +385,14 @@ if __name__=='__main__':
     DDD_plot  = 1           # see description at the beginning of the file
 
     # select the modes
-    modes     = [(3,3),(2,1),(3,2),(4,4)]
-    #modes     = [(3,3),(2,1)]
+    modes     = [(3,3), (2,1), (3,2), (4,4)]
     points    = 30          # points in the grid for each variable
 
     # set ranges and parameter values
     # q, chi are adimensional, distance in [Mpc], iota [rad]
     M     = 100
     q_val = 2
-    chi1  = -0.7
+    chi1  = 0.0
     chi2  = 0.0
     dist  = 450
     iota  = 0.7
@@ -414,12 +427,13 @@ if __name__=='__main__':
         raise ValueError('\nCannot use geometrical units for combinations including extrinsic parameters. Exiting...')
 
     # set working directories and paths
-    work_path  = os.getcwd()
-    if not os.path.exists('TEOBPM_mismatch_HMs_results'):
-        os.makedirs('TEOBPM_mismatch_HMs_results')
-    plot_path  = os.path.join(work_path, 'TEOBPM_mismatch_HMs_results')
-
-    asd_filepath = 'PSDs/'+asd_filename
+    work_path    = os.getcwd()
+    pardir_path  = os.path.abspath(os.path.join(work_path,     os.pardir))
+    results_path = os.path.abspath(os.path.join(pardir_path,   'results'))
+    plot_path    = os.path.abspath(os.path.join(results_path,  'TEOBPM_mismatch_HMs'))
+    asd_filepath = os.path.abspath(os.path.join(pardir_path,   'PSDs/'+asd_filename))
+    if not os.path.exists(results_path): os.makedirs(results_path)
+    if not os.path.exists(plot_path):    os.makedirs(plot_path)
 
     modes_string = ''
     for mode in modes:
@@ -448,7 +462,6 @@ if __name__=='__main__':
                     'inclination' : iota  ,
                     'phi'         : 0.0   ,
                     'modes'       : modes ,
-                    'full-modes'  : 0     ,
                     'TGR'         : {}    ,
                     'geom'        : geom  }
 
@@ -487,7 +500,7 @@ if __name__=='__main__':
                     ax.plot_wireframe(X, Y, Z[lm].T, color='black', linewidth=0.5)
                     ctrf = ax.contourf(X, Y, SNR[lm].T, zdir='z', offset=Z[lm].min(), cmap='RdYlBu_r')
                     cbar  = fig.colorbar(ctrf, ax=ax, shrink=0.4, aspect=10)
-                    cbar.ax.set_title(r'SNR')
+                    cbar.ax.set_title('SNR')
                     
                     ax.set_zlim(Z[lm].min(), Z[lm].max())
                     if geom:
@@ -496,7 +509,7 @@ if __name__=='__main__':
                         ax.set_title('SNR MODE {}  -  {}'.format(lm, figure_names['title']))
                     ax.set_xlabel('{}'.format(figure_names['x_label']))
                     ax.set_ylabel('{}'.format(figure_names['y_label']))
-                    ax.set_zlabel(r'$MM$')
+                    ax.set_zlabel('$MM$')
 
                     ax.grid(linestyle='--')
                     fig.tight_layout()
@@ -505,7 +518,10 @@ if __name__=='__main__':
                 if (DDD_plot==0 or DDD_plot==1):  # 2D plot of SNR/logB
                     fig = plt.figure()
                     ax  = plt.axes()
-                    ctrf = ax.contourf(X, Y, SNR[lm].T, locator=ticker.LogLocator(), cmap ="RdYlBu_r", levels=[5,10,15,25,50,100,500,1000])
+                    levels = [5,10,15,25,50,100,500,1000]
+                    import matplotlib.colors as colors
+                    ctrf = ax.contourf(X, Y, SNR[lm].T, cmap="pink", levels=levels, norm=colors.PowerNorm(gamma=0.25), locator=ticker.LinearLocator())
+                    #ctrf = ax.contourf(X, Y, SNR[lm].T, cmap="RdYlBu_r", levels=levels, locator=ticker.LinearLocator())
                     cbar = plt.colorbar(ctrf)
 
                     if geom:
@@ -514,7 +530,6 @@ if __name__=='__main__':
                         ax.set_title('SNR MODE {}  -  {}'.format(lm, figure_names['title']))
                     ax.set_xlabel('{}'.format(figure_names['x_label']))
                     ax.set_ylabel('{}'.format(figure_names['y_label']))
-                    #ax.grid(linestyle='--')
                     fig.tight_layout()
                     plt.savefig(os.path.join(plot_path, 'mismatch_{}_{}-{}.pdf'.format(lm, mm_params['label'][0], mm_params['label'][1])))
 
@@ -536,7 +551,7 @@ if __name__=='__main__':
                 ax.set_title('HIGHER MODES COMPARISON  -  {}'.format(figure_names['title']))
             ax.set_xlabel('{}'.format(figure_names['x_label']))
             ax.set_ylabel('{}'.format(figure_names['y_label']))
-            ax.set_zlabel(r'$MM$%')
+            ax.set_zlabel('$MM$%')
 
             ax.legend()
             ax.grid(linestyle='--')
@@ -546,5 +561,4 @@ if __name__=='__main__':
         if sing_comb: break
         if geom: break
 
-plt.show()
 plt.close()
