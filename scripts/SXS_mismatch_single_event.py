@@ -271,13 +271,10 @@ class SXS_mismatch:
                                          iota,
                                          0.0,
                                          [mode],
-                                         0,     # <---- full modes flag, do not change
                                          {},
                                          1)     # <---- geometric units, do not change
             
-                t_pyr = t * (self.M*conv_mass_time)  # convert time in [s]
-
-                _, _, _, hp_pyr, hc_pyr = TEOBPM_model.waveform(t_pyr) * self.nu # pyRing wf in geom units is (r h)/(M nu). need to multiply for nu
+                _, _, _, hp_pyr, hc_pyr = TEOBPM_model.waveform(t)
                 self.af = TEOBPM_model.JimenezFortezaRemnantSpin() # final spin
 
                 mode_out = mode_output(hp_pyr, hc_pyr, t, phase_sign=True)
@@ -319,7 +316,7 @@ class SXS_mismatch:
 if __name__=='__main__':
 # -------------------------------------------------- #
     # select init parameters
-    event  = '1110'     # name of the SXS simulation:
+    event  = '0305'     # name of the SXS simulation:
 
     # select the modes (if all_modes flag is off)
     modes = [(2,2),(3,3),(2,1),(3,2)]
@@ -348,7 +345,7 @@ if __name__=='__main__':
                     'pyRing':     pyRing,
                     'interp':     interp}
     if all_modes:   # available modes
-        modes = [(2,2), (2,1), (3,3), (3,2), (4,4), (4,3), (4,2)]
+        modes = [(2,2), (2,1), (3,3), (3,2), (4,4), (4,3), (4,2), (5,5)]
 
     SXS_mismatch_output = SXS_mismatch(event_name, config_flags, modes)
     output_dictionaries = SXS_mismatch_output.return_dictionaries()
